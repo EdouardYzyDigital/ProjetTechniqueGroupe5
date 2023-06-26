@@ -1,5 +1,5 @@
 import { FormGroup, Col, Row, Input, Button, Card, CardHeader, CardBody, Label, Media } from 'reactstrap'
-import { useState } from 'react';
+import { useState } from 'react'
 import logoDefault from '../../images/default.png'
 
 const SignIn = () => {
@@ -29,7 +29,7 @@ const SignIn = () => {
                                 id="firstname"
                                 name="firstname"
                                 placeholder="Enter your firstname..."
-                                onChange={setName}
+                                onChange={e => setName(e.target.value)}
                                 />
                             </FormGroup>
                             </Col>
@@ -43,7 +43,7 @@ const SignIn = () => {
                                 id="lastname"
                                 name="lastname"
                                 placeholder="Enter your lastname..."
-                                onChange={setLastName}
+                                onChange={e => setLastName(e.target.value)}
                                 />
                             </FormGroup>
                             </Col>
@@ -60,7 +60,7 @@ const SignIn = () => {
                                 name="poste"
                                 placeholder="Enter your job..."
                                 type="text"
-                                onChange={setJob}
+                                onChange={e => setJob(e.target.value)}
                                 />
                             </FormGroup>
                         </Col>
@@ -89,7 +89,7 @@ const SignIn = () => {
                             </FormGroup>
                         </Col>
                         </Row>
-                        <Button color='btn btn-outline-info w-25 mt-2'>
+                        <Button color='btn btn-outline-info w-25 mt-2' onClick={() => console.log(name, lastname, image, job)}>
                             Sign in
                         </Button>   
                 </CardBody>

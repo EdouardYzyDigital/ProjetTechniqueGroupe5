@@ -1,16 +1,20 @@
-import { Col } from "reactstrap";
+import { Button, Col } from "reactstrap";
+import WebcamCapture from "../../components/Webcam";
+import { useEffect, useState} from 'react'
 
 const Login = () => {
+
+    const [image, setImage] = useState(null)
+
+    useEffect(() => {
+        console.log(image)
+    }, [image])
+
     return (
         <div className="container">
             <h1 className="fs-1 text-center mt-4" style={{fontFamily: 'Roboto'}}>Login</h1>
             <Col md='10'>
-                <div style={{backgroundColor: 'red'}}>
-
-                </div>
-            </Col>
-            <Col md='2'>
-
+                <WebcamCapture setImage={setImage}/>
             </Col>
         </div>
     );

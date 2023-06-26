@@ -1,6 +1,6 @@
 import Webcam  from 'react-webcam'
 import { useState, useRef, useCallback } from 'react';
-import { Button } from 'reactstrap';
+import { Button, Col } from 'reactstrap';
 
 const WebcamCapture = props => {
     const webcamRef = useRef(null);
@@ -13,23 +13,27 @@ const WebcamCapture = props => {
     }, [webcamRef, setImgSrc]);
   
     return (
-      <div className='d-flex'>
-        <Webcam
-          mirrored={true}
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/jpeg"
-        />
-        <Button onClick={capture}>
-            Capture photo
-        </Button>
-        {imgSrc && (
-          <img
-            src={imgSrc}
-            alt=''
-          />
-        )}
-      </div>
+        <>
+        <Col md={6}>
+            <Webcam
+            mirrored={true}
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/jpeg"
+            />
+        </Col>
+        <Col md={6} className='d-flex flex-column'>
+            <Button onClick={capture}>
+                Capture photo
+            </Button>
+            {imgSrc && (
+            <img
+                src={imgSrc}
+                alt=''
+            />
+            )}
+        </Col>
+        </>
     );
   };
 

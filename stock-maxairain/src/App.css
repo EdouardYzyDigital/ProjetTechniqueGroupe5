@@ -41,3 +41,7 @@
   font-family: 'Roboto';
   src: url('./fonts/Roboto-Black.ttf') format('ttf');
 }
+
+.text-font-roboto {
+  font-family: 'Roboto';
+}

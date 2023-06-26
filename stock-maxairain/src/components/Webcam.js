@@ -13,7 +13,7 @@ const WebcamCapture = props => {
     }, [webcamRef, setImgSrc]);
   
     return (
-      <>
+      <div className='d-flex'>
         <Webcam
           mirrored={true}
           audio={false}
@@ -29,7 +29,7 @@ const WebcamCapture = props => {
             alt=''
           />
         )}
-      </>
+      </div>
     );
   };
 

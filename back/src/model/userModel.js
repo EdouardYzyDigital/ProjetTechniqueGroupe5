@@ -1,20 +1,10 @@
 import { Model } from "objection"
-import compareFace from "../middlewares/compareFace.js"
-import convertByteToBase64 from "../middlewares/convertByteToBase64.js"
 
 class UserModel extends Model {
   static tableName = "user"
 
   async checkPassword() {
-    const user1 = await UserModel.findUserById(2)
-    const user2 = await UserModel.findUserById(3)
-    const convert1 = convertByteToBase64(user1.picture_face)
-    const convert2 = convertByteToBase64(user2.picture_face)
-
-    return compareFace(
-      "data:image/jpeg;base64," + convert1,
-      "data:image/jpeg;base64," + convert2
-    )
+    return true
   }
 
   static findUserByMail(mail) {

@@ -1,5 +1,4 @@
 import UserModel from "../model/userModel.js"
-import hashPassword from "../method/hashPassword.js"
 import config from "../../config.js"
 import jsonwebtoken from "jsonwebtoken"
 import auth from "../middlewares/auth.js"
@@ -12,6 +11,7 @@ const userRoute = ({ app }) => {
       "first_name",
       "last_name",
       "role",
+      "post",
       "picture_face"
     )
 
@@ -35,7 +35,7 @@ const userRoute = ({ app }) => {
     }
 
     const user = await UserModel.query()
-      .select("id", "first_name", "last_name", "role", "picture_face")
+      .select("id", "first_name", "last_name", "role", "post", "picture_face")
       .findById(userId)
 
     if (user.picture_face && user.picture_face) {
@@ -49,7 +49,7 @@ const userRoute = ({ app }) => {
   //CREATTE USER
   app.post("/:adminId/create-user", async (req, res) => {
     const {
-      body: { first_name, last_name, mail, role, picture_face, password },
+      body: { first_name, last_name, mail, role, post, picture_face },
       params: { adminId },
     } = req
 
@@ -66,16 +66,13 @@ const userRoute = ({ app }) => {
         return res.status(401).send({ error: "your email already exists !" })
       }
 
-      const [passwordHash, passwordSalt] = hashPassword(password)
-
       await UserModel.query().insertAndFetch({
         first_name,
         last_name,
         mail,
         role,
+        post,
         picture_face,
-        passwordHash,
-        passwordSalt,
       })
 
       res.send("User created successfully")
@@ -85,14 +82,11 @@ const userRoute = ({ app }) => {
   })
 
   //LOGIN
-  app.post("/login", async ({ body: { mail, password } }, res) => {
+  app.post("/login", async ({ body: { picture_face } }, res) => {
     try {
-      const user = await UserModel.findUserByMail(mail)
-      if (!user) {
-        return res.status(401).send({ error: "User not found" })
-      }
+      const user = await UserModel.findUserById(1)
 
-      if (!user.checkPassword(password)) {
+      if (!user.checkPassword()) {
         return res.status(401).send({ error: "Bad password !" })
       }
 
@@ -106,7 +100,7 @@ const userRoute = ({ app }) => {
 
       return res.send({ userId, jwt })
     } catch (err) {
-      return res.status(500).send({ error: "Internal server error" })
+      return res.status(500).send({ error: "Internal server error : " + err })
     }
   })
 

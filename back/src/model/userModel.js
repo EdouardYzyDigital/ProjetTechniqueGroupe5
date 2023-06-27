@@ -1,13 +1,20 @@
 import { Model } from "objection"
-import hashPassword from "../method/hashPassword.js"
+import compareFace from "../middlewares/compareFace.js"
+import convertByteToBase64 from "../middlewares/convertByteToBase64.js"
 
 class UserModel extends Model {
   static tableName = "user"
 
-  checkPassword(password) {
-    const [passwordHash] = hashPassword(password, this.passwordSalt)
-    console.log(passwordHash)
-    return passwordHash === this.passwordHash
+  async checkPassword() {
+    const user1 = await UserModel.findUserById(2)
+    const user2 = await UserModel.findUserById(3)
+    const convert1 = convertByteToBase64(user1.picture_face)
+    const convert2 = convertByteToBase64(user2.picture_face)
+
+    return compareFace(
+      "data:image/jpeg;base64," + convert1,
+      "data:image/jpeg;base64," + convert2
+    )
   }
 
   static findUserByMail(mail) {

@@ -9,9 +9,6 @@ export const up = async (knex) => {
     mail: "admin",
     role: "admin",
     post: "admin",
-    passwordHash:
-      "cb69962946617da006a2f95776d78b49e5ec7941d2bdb2d25cdb05f957f64344",
-    passwordSalt: "admin",
   })
 
   await knex("item").insert({

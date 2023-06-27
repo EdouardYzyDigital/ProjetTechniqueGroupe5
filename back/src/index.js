@@ -17,5 +17,5 @@ const port = 3000
 allRoutes({ app, db })
 
 app.listen(port, () => {
-  console.log("App listening on port" + port)
+  console.log("App listening on port : " + port)
 })

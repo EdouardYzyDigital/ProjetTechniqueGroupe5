@@ -8,11 +8,9 @@ export const up = async (knex) => {
     table.string("first_name", 255).notNullable()
     table.string("last_name", 255).notNullable()
     table.string("mail", 255).notNullable()
-    table.binary("picture_face", 255)
+    table.binary("picture_face", 1000)
     table.string("role", 255)
     table.string("post", 255)
-    table.text("passwordHash").notNullable()
-    table.text("passwordSalt").notNullable()
   })
 
   await knex.schema.createTable("item", (table) => {

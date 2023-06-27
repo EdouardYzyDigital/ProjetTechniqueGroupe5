@@ -12,7 +12,7 @@ const Login = () => {
 
     return (
         <div className="container">
-            <h1 className="fs-1 text-center mt-4" style={{fontFamily: 'Roboto'}}>Login</h1>
+            <h1 className="fs-1 text-center mt-4" style={{fontFamily: 'Roboto', color: '#379EC1'}}>Login</h1>
             <Col md='12'>
                 <WebcamCapture setImage={setImage}/>
             </Col>

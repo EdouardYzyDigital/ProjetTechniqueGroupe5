@@ -11,29 +11,33 @@ const WebcamCapture = props => {
       setImgSrc(imageSrc);
       props.setImage(imgSrc)
     }, [webcamRef, setImgSrc]);
+
+    console.log(imgSrc)
   
     return (
-        <>
+        <div className="mt-4">
         <Col md={6}>
+            <div className='d-flex' style={{gap:'20px'}}>
             <Webcam
             mirrored={true}
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             />
-        </Col>
-        <Col md={6} className='d-flex flex-column'>
-            <Button onClick={capture}>
-                Capture photo
-            </Button>
             {imgSrc && (
             <img
                 src={imgSrc}
                 alt=''
             />
             )}
+            </div> 
         </Col>
-        </>
+        <Col md={12} className='text-center mt-5'>
+            <Button onClick={capture}>
+                Capture photo
+            </Button>
+        </Col>
+        </div>
     );
   };
 

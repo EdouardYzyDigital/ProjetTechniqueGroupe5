@@ -2,12 +2,12 @@ import { Routes, Route } from 'react-router-dom';
 import Login from './views/login/';
 import SignIn from './views/signin';
 import Footer from './components/Footer';
-import  logo  from './images/MaxAirain2.png'
+import NavbarHome from './components/Navbar';
 
 function App() {
   return (
     <>
-      <img src={logo} alt="" style={{width:"250px", height:"75px", marginLeft:"30px", marginTop:"10px"}}/>
+      <NavbarHome/>
       <Routes>
           <Route
             exact

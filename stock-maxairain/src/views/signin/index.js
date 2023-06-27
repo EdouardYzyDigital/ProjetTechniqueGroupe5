@@ -7,6 +7,25 @@ const SignIn = () => {
     const [name, setName] = useState(null)
     const [lastname, setLastName] = useState(null)
     const [job, setJob] = useState(null)
+    const [base64image, setBase64] = useState(null)
+
+    const onChange = async e => {
+        if (!e) {
+            OnChangeImage(null)
+            return
+        }
+        const base64url = await blobToBase64(e)
+        setBase64(base64url)
+        OnChangeImage(URL.createObjectURL(e))
+    }
+
+    const blobToBase64 = async (blob) => {
+        return new Promise((resolve, _) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
+      }
 
     return (
         <div className="container">
@@ -22,7 +41,7 @@ const SignIn = () => {
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="firstname">
-                                Fistname
+                                Prénom
                                 </Label>
                                 <Input
                                 defaultValue={name}
@@ -36,7 +55,7 @@ const SignIn = () => {
                             <Col md={6}>
                             <FormGroup>
                                 <Label for="lastname">
-                                Lastname
+                                Nom
                                 </Label>
                                 <Input
                                 defaultValue={lastname}
@@ -78,7 +97,7 @@ const SignIn = () => {
                                         Upload
                                         <Input
                                         type="file"
-                                        onChange={e => OnChangeImage(URL.createObjectURL(e.target.files[0]))}
+                                        onChange={e => onChange((e.target.files[0]))}
                                         hidden
                                         accept="image/*"
                                         />

@@ -107,6 +107,30 @@ const itemRoute = ({ app }) => {
     }
   })
 
+  //UPDATE request
+  //UPDATE New ITEM (only for admins)
+  app.post("/update/:itemId", async (req, res) => {
+    const {
+      body: { id, label, quantity },
+      params: { adminId },
+    } = req
+
+    try {
+      const checkAdmin = await UserModel.findUserByIdAndRole(adminId, "admin")
+
+      if (!checkAdmin) {
+        return res.status(403).send({ error: "forbidden" })
+      }
+
+      const item = await ItemModel.query().updateAndFetchById(id, req.body)
+
+      res.send("Item updated")
+
+    } catch (err) {
+      return res.status(401).send({ error: "Error : " + err })
+    }
+  })
+
   //DELETE ITEM
   app.delete("/:adminId/items/:itemId", async (req, res) => {
     try {

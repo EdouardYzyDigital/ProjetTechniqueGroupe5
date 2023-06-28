@@ -63,7 +63,7 @@
                 }
               ],
             "post": {
-                "tags": ["Users"],
+                "tags": ["User"],
                 "summary": "Created user in system",
                 "responses": {
                   "200": {
@@ -74,7 +74,7 @@
           },
           "/login": {
             "post": {
-                "tags": ["Users"],
+                "tags": ["User"],
                 "summary": "Login for user",
                 "responses": {
                   "200": {
@@ -101,7 +101,7 @@
                 }
               ],
             "delete": {
-                "tags": ["Users"],
+                "tags": ["User"],
                 "summary": "Delete user in system by his ID",
                 "responses": {
                   "200": {
@@ -109,38 +109,176 @@
                   }
                 }
               }
-          }
-    },
-        "definitions": {
-          "User": {
-            "required": ["first_name", "last_name", "role","picture_face"],
-            "properties": {
-              "_id": {
-                "type": "integer",
-                "uniqueItems": true
-              },
-              "first_name": {
-                "type": "string"
-              },
-              "last_name": {
-                "type": "string"
-              },
-              "role": {
-                "type": "string"
-              },
-              "post": {
-                "type": "string"
-              },
-              "picture_face": {
-                "type": "array"
+          },
+          "/items": {
+            "get": {
+              "tags": ["Items"],
+              "summary": "Get all items in system",
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
               }
             }
           },
-          "Users": {
-            "type": "array",
-            "$ref": "#/definitions/User"
+          "/chooseItems/{userId}": {
+            "parameters": [
+              {
+                "name": "userId",
+                "in": "path",
+                "required": true,
+                "description": "ID of user that we want to find",
+                "type": "integer"
+              }
+            ],
+            "post": {
+                "tags": ["Items"],
+                "summary": "Get user in system by his ID",
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  }
+                }
+            }
+          },
+          "/items/{userId}" : {
+            "parameters": [
+              {
+                "name": "userId",
+                "in": "path",
+                "required": true,
+                "description": "ID of user that we want to find",
+                "type": "integer"
+              }
+            ],
+            "get": {
+              "tags": ["Items"],
+              "summary": "Get user in system by his ID",
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            }
+          },
+          "/{adminId}/create-item": {
+            "parameters": [
+              {
+                "name": "adminId",
+                "in": "path",
+                "required": true,
+                "description": "ID of admin that we want to find",
+                "type": "integer"
+              }
+            ],
+            "post": {
+                "tags": ["Item"],
+                "summary": "Get user in system by his ID",
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  }
+                }
+              }
+          },
+          "/update/{itemId}": {
+            "parameters": [
+              {
+                "name": "itemId",
+                "in": "path",
+                "required": true,
+                "description": "ID of item that we want to find",
+                "type": "integer"
+              }
+            ],
+            "put": {
+                "tags": ["Item"],
+                "summary": "Get user in system by his ID",
+                "responses": {
+                  "200": {
+                    "description": "OK"
+                  }
+                }
+              }
+          },
+          "/{adminId}/items/{itemId}": {
+            "parameters": [
+              {
+                "name": "adminId",
+                "in": "path",
+                "required": true,
+                "description": "ID of admin that we want to find",
+                "type": "integer"
+              },
+              {
+                "name": "itemId",
+                "in": "path",
+                "required": true,
+                "description": "ID of item that we want to find",
+                "type": "integer"
+              }
+            ],
+            "delete": {
+              "tags": ["Item"],
+              "summary": "Get user in system by his ID",
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            }
+          }
+        
+    },
+    "definitions": {
+      "User": {
+        "required": ["first_name", "last_name", "role","picture_face"],
+        "properties": {
+          "_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "post": {
+            "type": "string"
+          },
+          "picture_face": {
+            "type": "array"
           }
         }
+      },
+      "Users": {
+        "type": "array",
+        "$ref": "#/definitions/User"
+      },
+      "Item": {
+        "required": ["label", "quantity", "id"],
+        "properties": {
+          "_id": {
+            "type": "integer",
+            "uniqueItems": true
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "Items": {
+        "type": "array",
+        "$ref": "#/definitions/Item"
+      }
+    }
 }
 
   

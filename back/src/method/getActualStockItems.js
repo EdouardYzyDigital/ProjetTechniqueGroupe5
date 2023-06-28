@@ -5,11 +5,11 @@ const getActualStockItems = async (itemsBase) => {
     const a = await UserItemModel.query().select()
 
     itemsBase.forEach(item => {
-        const tabRelations = a.filter(el => el.id === item.id)
-        if(tabRelations !== undefined)
-        console.log('tab relations', tabRelations)
-        item.quantity = item.quantity - tabRelations.length
-        items.push(item)
+        const tabRelations = a.filter(el => el.id_item === item.id)
+        if (tabRelations !== undefined) {
+            item.quantity = item.quantity - tabRelations.length
+            items.push(item)
+        }
     });
 
     return items

@@ -25,30 +25,38 @@ const itemRoute = ({ app }) => {
     } = req
     
     try {
-    const checkUser = await UserModel.findUserById(userId)
+        const checkUser = await UserModel.findUserById(userId)
 
-    if (!checkUser) {
-        return res.status(403).send({ error: "User not found" })
-    }
-
-    itemsSelected.forEach( async item => {
-        const itemFound = await ItemModel.findItemById(item.id)
-
-        if (!itemFound) {
-            return res.status(403).send({ error: "Item not found" })
+        if (!checkUser) {
+            return res.status(403).send({ error: "User not found" })
         }
 
-        if (itemFound.quantity === 0) {
-            return res.status(403).send({ error: "Item not available" })
-        }
+        const items = await ItemModel.query().select(
+            "id",
+            "label",
+            "quantity"
+        )
+    
+        const actualStockItems = await getActualStockItems(items)
 
-        await UserItemModel.query().insertAndFetch( {
-            id_user: checkUser.id,
-            id_item: itemFound.id
+        itemsSelected.forEach( async item => {
+            const itemFound = actualStockItems.find(el => el.id === item.id)
+
+            if (!itemFound) {
+                return res.status(403).send({ error: "Item not found" })
+            }
+
+            if (itemFound.quantity === 0) {
+                return res.status(403).send({ error: "Item not available" })
+            }
+
+            await UserItemModel.query().insertAndFetch( {
+                id_user: checkUser.id,
+                id_item: itemFound.id
+            })
         })
-    })
 
-    res.send("Items selected successfully")
+        res.send("Items selected successfully")
     } catch (err) {
         return res.status(401).send({ error: "Error : " + err })
     }

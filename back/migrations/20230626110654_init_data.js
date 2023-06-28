@@ -22,7 +22,7 @@ export const up = async (knex) => {
   await knex.schema.createTable("user_item", (table) => {
     table.increments("id").notNullable()
     table.integer("id_user").notNullable()
-    table.boolean("id_item").notNullable()
+    table.integer("id_item").notNullable()
   })
 }
 

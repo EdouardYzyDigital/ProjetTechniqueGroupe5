@@ -3,6 +3,7 @@ import config from "../../config.js"
 import UserModel from "../model/userModel.js"
 import UserItemModel from "../model/userItemModel.js"
 import getActualStockItems from "../method/getActualStockItems.js"
+import inArray from "../method/inArray.js"
 
 const itemRoute = ({ app }) => {
   //GET request
@@ -32,8 +33,11 @@ const itemRoute = ({ app }) => {
         }
 
         const itemsUserRelations = await UserItemModel.query().select().where('id_user', checkUser.id)
-
-        if (itemsUserRelations?.length === 0) {
+        const idTabsRelations = itemsUserRelations.map(el => {return el.id_item})
+        const idTabsSelected = itemsSelected.map(el => {return el.id})
+        
+        if (itemsUserRelations?.length === 0 && itemsSelected.length !== 0) {
+          console.log('here')
           itemsSelected.forEach(async item => {
             await UserItemModel.query().insertAndFetch( {
               id_user: checkUser.id,
@@ -41,19 +45,22 @@ const itemRoute = ({ app }) => {
             })
           })
         } else {
-          itemsUserRelations.forEach(async rel => {
-            let itemsSelectedForRelation = itemsSelected.find(el => el.id === rel.id_item)
-            if (itemsSelectedForRelation === undefined) {
-              await UserItemModel.query().deleteById(rel.id)
-            } else {
+
+          idTabsSelected.forEach(async item => {
+            if (!inArray(item, idTabsRelations)) {
               await UserItemModel.query().insertAndFetch( {
                 id_user: checkUser.id,
-                id_item: el.id
+                id_item: item
               })
             }
           })
-        }
+          idTabsRelations.forEach(async relation => {
+            if (!inArray(relation, idTabsSelected)) {
+              await UserItemModel.query().delete().where('id_user', checkUser.id).andWhere('id_item', relation)
+            }
+          })
 
+        }
         res.send("Items selected successfully")
     } catch (err) {
         return res.status(401).send({ error: "Error : " + err })

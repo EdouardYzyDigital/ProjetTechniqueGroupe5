@@ -28,33 +28,31 @@ const itemRoute = ({ app }) => {
         const checkUser = await UserModel.findUserById(userId)
 
         if (!checkUser) {
-            return res.status(403).send({ error: "User not found" })
+          return res.status(403).send({ error: "User not found" })
         }
 
-        const items = await ItemModel.query().select(
-            "id",
-            "label",
-            "quantity"
-        )
-    
-        const actualStockItems = await getActualStockItems(items)
+        const itemsUserRelations = await UserItemModel.query().select().where('id_user', checkUser.id)
 
-        itemsSelected.forEach( async item => {
-            const itemFound = actualStockItems.find(el => el.id === item.id)
-
-            if (!itemFound) {
-                return res.status(403).send({ error: "Item not found" })
-            }
-
-            if (itemFound.quantity === 0) {
-                return res.status(403).send({ error: "Item not available" })
-            }
-
+        if (itemsUserRelations?.length === 0) {
+          itemsSelected.forEach(async item => {
             await UserItemModel.query().insertAndFetch( {
-                id_user: checkUser.id,
-                id_item: itemFound.id
+              id_user: checkUser.id,
+              id_item: item.id
             })
-        })
+          })
+        } else {
+          itemsUserRelations.forEach(async rel => {
+            let itemsSelectedForRelation = itemsSelected.find(el => el.id === rel.id_item)
+            if (itemsSelectedForRelation === undefined) {
+              await UserItemModel.query().deleteById(rel.id)
+            } else {
+              await UserItemModel.query().insertAndFetch( {
+                id_user: checkUser.id,
+                id_item: el.id
+              })
+            }
+          })
+        }
 
         res.send("Items selected successfully")
     } catch (err) {
